@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="{{ asset('css/owl.carousel.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
-
+    @yield('css')
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -41,7 +41,15 @@
                             <li><a href="#"><i class="fa fa-heart"></i> Wishlist</a></li>
                             <li><a href="/cart"><i class="fa fa-user"></i> My Cart</a></li>
                             <li><a href=""><i class="fa fa-user"></i> Checkout</a></li>
-                            <li><a href="/dangnhap"><i class="fa fa-user"></i> Login</a></li>
+                            @if(Session::has('user'))
+                                <!-- Đã đăng nhập: Ẩn login, thay bằng logout -->
+                                <li><a href="{{ route('logout') }}" onclick="return confirm('Bạn có chắc muốn đăng xuất?')">
+                                    <i class="fa fa-sign-out"></i> Đăng xuất
+                                </a></li>
+                            @else
+                                <!-- Chưa đăng nhập: Hiển thị login -->
+                                <li><a href="/dangnhap"><i class="fa fa-user"></i> Login</a></li>
+                            @endif
                         </ul>
                     </div>
                 </div>
@@ -66,7 +74,23 @@
                                     <li><a href="#">German</a></li>
                                 </ul>
                             </li>
-                            <a href="/dangki">Đăng ký</a>
+                            @if(Session::has('user'))
+                                @if(Session::get('user.role') === 'khachhang')
+                                    @php
+                                        $fullName = Session::get('user.hoTenNguoiDung');
+                                        $ten = explode(' ', trim($fullName));  // Tách thành mảng: ['Nguyễn', 'Trần', 'Dương', 'Khan']
+                                        $ten = end($ten);  // Lấy phần cuối: 'Khan'
+                                    @endphp
+                                    <!-- Khách hàng: Hiển thị tên -->
+                                    <span class="role-nguoidung" style="color: #888;"><i class="fa fa-user"></i> {{ $ten }}</span>
+                                @else
+                                    <!-- Admin: Hiển thị Admin Panel -->
+                                    <a href="{{ route('admin.home') }}" class="role-nguoidung"><i class="fa fa-user"></i> Admin Panel</a>
+                                @endif
+                            @else
+                                <!-- Chưa đăng nhập: Đăng ký -->
+                                <a href="/dangki"><i class="fa fa-user"></i> Đăng ký</a>
+                            @endif
                         </ul>
                     </div>
                 </div>
@@ -103,22 +127,32 @@
                         <span class="icon-bar"></span>
                     </button>
                 </div> 
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/shop">Shop page</a></li>
-                        <li><a href="/single">Single product</a></li>
-                        <li><a href="/cart">Cart</a></li>
-                        <li><a href="/checkout">Checkout</a></li>
-                        <li><a href="#">Category</a></li>
-                        <li><a href="#">Others</a></li>
-                        <li><a href="/contact">Contact</a></li>
-                    </ul>
-                </div>  
+                <ul class="nav navbar-nav">
+                    <li class="{{ request()->routeIs('home') ? 'active' : '' }}">
+                        <a href="{{ route('home') }}">Home</a>
+                    </li>
+                    <li class="{{ request()->routeIs('shop') ? 'active' : '' }}">
+                        <a href="{{ route('shop') }}">Shop page</a>
+                    </li>
+                    <li class="{{ request()->routeIs('single.static') ? 'active' : '' }}">  {{-- Giả sử name cho /single tĩnh --}}
+                        <a href="{{ route('single.static') }}">Single product</a>
+                    </li>
+                    <li class="{{ request()->routeIs('cart') ? 'active' : '' }}">
+                        <a href="{{ route('cart') }}">Cart</a>
+                    </li>
+                    <li class="{{ request()->routeIs('checkout') ? 'active' : '' }}">
+                        <a href="{{ route('checkout') }}">Checkout</a>
+                    </li>
+                    <li><a href="#">Category</a></li>  {{-- Không active nếu chưa có route --}}
+                    <li><a href="#">Others</a></li>
+                    <li class="{{ request()->routeIs('contact') ? 'active' : '' }}">
+                        <a href="{{ route('contact') }}">Contact</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div> <!-- End mainmenu area -->
-    @if (Request::path() !== '/' & Request::path() !== '/home')
+    @if (Request::path() !== '/')
         @include('layouts.nav')
     @endif
     <div>@yield('content')</div>
@@ -220,5 +254,6 @@
         <!-- Slider -->
     <script type="text/javascript" src="{{ asset('js/bxslider.min.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('js/script.slider.js') }}"></script>
+    @yield('js')
   </body>
 </html>

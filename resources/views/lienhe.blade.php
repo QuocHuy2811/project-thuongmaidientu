@@ -1,7 +1,13 @@
 @extends('layouts.app')
 
 @section('title', 'Liên hệ')
+
 @section('navTitle','Liên hệ')
+
+@section('css')
+
+@section('js')
+
 @section('content')
     <div class="container mt-3 mb-3">
         <form>

@@ -1,4 +1,3 @@
-<!-- resources/views/layouts/nav.blade.php -->
 <div class="product-big-title-area">
         <div class="container">
             <div class="row">

@@ -1,5 +1,16 @@
+<?php use Illuminate\Support\Str; ?>
 @extends('layouts.app')
 @section('title', 'Welcome to uStora')
+
+@section('css')
+    <!-- <style>
+        img.img-product {
+            width: 220px !important;
+            height: 270px !important;
+            object-fit: contain !important; /* object-fit: contain: Ảnh sẽ được điều chỉnh để vừa khung mà giữ nguyên tỷ lệ. */
+        }
+    </style> -->
+@section('js')
 
 @section('content')
     <div class="slider-area">
@@ -192,20 +203,21 @@
                     <h2 class="section-title">Sản phẩm mới nhất</h2>
                     <div class="product-carousel">
                             @foreach ($products as $product)
+                                <?php $slug = $product->maSP . '-' . Str::slug($product->tenSP); ?>  {{-- Tạo slug --}}
                                 <div class="single-product">
                                     <div class="product-f-image">
-                                        <img src="{{ asset('img/' . $product->hinhAnh) }}" alt="{{ $product->tenSP }}">
+                                        <img class="img-product" src="{{ asset('img/' . $product->hinhAnh) }}" alt="{{ $product->tenSP }}">
                                     <!-- chuc nang nay chua hoan thanh -->
                                         <div class="product-hover">
                                             <a href="#" class="add-to-cart-link"><i class="fa fa-shopping-cart"></i> Thêm vào giỏ</a>
-                                            <a href="{{ route('single', ['maSP' => $product->maSP]) }}" class="view-details-link"><i class="fa fa-link"></i> Xem chi tiết</a>
+                                            <a href="{{ route('single', ['slug' => $slug ]) }}" class="view-details-link"><i class="fa fa-link"></i> Xem chi tiết</a>
                                         </div>
                                     </div>
-                                    <h2><a href="{{ route('single', ['maSP' => $product->maSP]) }}">{{ $product->tenSP }}</a></h2>
+                                    <h2><a href="{{ route('single', ['slug' => $slug ]) }}">{{ $product->tenSP }}</a></h2>
                                     <!-- /* */ -->
                                     <div class="product-carousel-price">
                                         <ins>{{ number_format($product->giaTien, 2) }} VND</ins>
-                                        @if ($product->giaTien < 10000000)
+                                        @if ($product->giaTien > 20000000)
                                             <del>{{ number_format($product->giaTien * 1.1, 2) }} VND</del>
                                         @endif
                                     </div>

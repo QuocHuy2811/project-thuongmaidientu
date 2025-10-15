@@ -1,7 +1,13 @@
 @extends('layouts.app')
 
 @section('title', 'Checkout Page - uStora Demo')
+
 @section('navTitle','Shopping Cart')
+
+@section('css')
+
+@section('js')
+
 @section('content')
 <div class="single-product-area">
         <div class="zigzag-bottom"></div>

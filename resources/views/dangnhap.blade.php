@@ -1,7 +1,70 @@
 @extends('layouts.app')
 
 @section('title', 'Đăng nhập')
+
 @section('navTitle', 'Đăng nhập')
+
+@section('css')
+
+@section('js')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+        $('#login-form').on('submit', function(e) {
+            e.preventDefault(); // Ngăn tải lại trang
+
+            // Xóa thông báo cũ
+            $('#email-error').hide().text('');
+            $('#password-error').hide().text('');
+            $('#success-message').hide().text('');
+
+            // Gửi yêu cầu Ajax
+            $.ajax({
+                url: $(this).attr('action'),
+                method: 'POST',
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function(response) {
+                    // Xóa thông báo lỗi trước khi hiển thị thông báo thành công
+                    $('#error-message').hide().text('');
+                    $('#email-error').hide().text('');
+                    $('#password-error').hide().text('');
+                    if (response.success) {
+                         $('#success-message').text('Đăng nhập thành công! Đang chuyển hướng...').show();
+                        // Redirect dựa trên role
+                        let redirectUrl = response.role === 'admin' ? "{{ route('admin.home') }}" : "{{ route('home') }}";
+                        setTimeout(function() {
+                            window.location.href = redirectUrl; // Chuyển hướng sau 1 giây
+                        }, 1000);
+                    }
+                },
+                error: function(xhr) {
+                    // Xóa thông báo cũ
+                    $('#email-error').hide().text('');
+                    $('#error-message').hide().text('');
+                    $('#password-error').hide().text('');
+
+                    // Kiểm tra lỗi xác thực
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        let errors = xhr.responseJSON.errors;
+                        if (errors.exampleInputEmail1) {
+                            $('#email-error').text(errors.exampleInputEmail1[0]).show();
+                        }
+                        if (errors.exampleInputPassword) {
+                            $('#password-error').text(errors.exampleInputPassword[0]).show();
+                        }
+                    } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                        // Hiển thị lỗi đăng nhập sai
+                        $('#error-message').text(xhr.responseJSON.message).show();
+                    } else {
+                        // Lỗi không xác định
+                        $('#error-message').text('Đã có lỗi xảy ra. Vui lòng thử lại.').show();
+                    }
+                }
+            });
+        });
+    });
+    </script>
 @section('content')
 <style>
     .contact-container {
@@ -95,64 +158,13 @@
                 <div class="error" id="password-error"></div>
             </div>
             <button type="submit">Đăng nhập</button>
+            @if (session('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session('error') }}
+                </div>
+            @endif
         </form>
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#login-form').on('submit', function(e) {
-            e.preventDefault(); // Ngăn tải lại trang
-
-            // Xóa thông báo cũ
-            $('#email-error').hide().text('');
-            $('#password-error').hide().text('');
-            $('#success-message').hide().text('');
-
-            // Gửi yêu cầu Ajax
-            $.ajax({
-                url: $(this).attr('action'),
-                method: 'POST',
-                data: $(this).serialize(),
-                dataType: 'json',
-                success: function(response) {
-                    // Xóa thông báo lỗi trước khi hiển thị thông báo thành công
-                    $('#error-message').hide().text('');
-                    $('#email-error').hide().text('');
-                    $('#password-error').hide().text('');
-                    if (response.success) {
-                        $('#success-message').text('Đăng nhập thành công! Đang chuyển hướng...').show();
-                        setTimeout(function() {
-                            window.location.href = '/adminhome'; // Chuyển hướng sau 1 giây
-                        }, 1000);
-                    }
-                },
-                error: function(xhr) {
-                    // Xóa thông báo cũ
-                    $('#email-error').hide().text('');
-                    $('#error-message').hide().text('');
-                    $('#password-error').hide().text('');
-
-                    // Kiểm tra lỗi xác thực
-                    if (xhr.responseJSON && xhr.responseJSON.errors) {
-                        let errors = xhr.responseJSON.errors;
-                        if (errors.exampleInputEmail1) {
-                            $('#email-error').text(errors.exampleInputEmail1[0]).show();
-                        }
-                        if (errors.exampleInputPassword) {
-                            $('#password-error').text(errors.exampleInputPassword[0]).show();
-                        }
-                    } else if (xhr.responseJSON && xhr.responseJSON.message) {
-                        // Hiển thị lỗi đăng nhập sai
-                        $('#error-message').text(xhr.responseJSON.message).show();
-                    } else {
-                        // Lỗi không xác định
-                        $('#error-message').text('Đã có lỗi xảy ra. Vui lòng thử lại.').show();
-                    }
-                }
-            });
-        });
-    });
-</script>
 @endsection

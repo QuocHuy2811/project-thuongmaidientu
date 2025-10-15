@@ -1,5 +1,9 @@
 @extends('layouts.admin')
 @section('title', 'Thêm sản phẩm')
+@section('css')
+
+@section('js')
+
 @section('content')
     <div class="container">
         <h1 class="text-center mb-3">Trang Thêm Sản Phẩm</h1>
