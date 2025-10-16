@@ -11,7 +11,7 @@ class HomeController extends Controller
 {
     public function test_sp()
     {
-        // Lấy 6 sản phẩm đầu tiên
+        // Lấy 10 sản phẩm đầu tiên
         $products = SanPham::take(10)->get();
 
         return view('home', ['products' => $products]);
@@ -21,8 +21,7 @@ class HomeController extends Controller
     {
         // Tách maSP từ slug (phần đầu trước dấu '-')
         $parts = explode('-', $slug, 2);  // Giới hạn 2 phần để tránh tách tên
-        $maSP = $parts[0];  // Ví dụ: 'SP001'
-        
+        $maSP = $parts[0];  // Ví dụ: 'SP001'       
         // Query DB bằng maSP (sử dụng model cho nhất quán)
         $product = SanPham::where('maSP', $maSP)->first();
         
