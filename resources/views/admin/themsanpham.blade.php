@@ -1,12 +1,16 @@
 @extends('layouts.admin')
 @section('title', 'Thêm sản phẩm')
 @section('css')
-
+ <style>
+    div.container, #hinhAnh, option{
+        color: grey;
+    }
+ </style>
 @section('js')
 
 @section('content')
     <div class="container">
-        <h1 class="text-center mb-3">Trang Thêm Sản Phẩm</h1>
+        <p style="font-size: 50px;" class="text-center mb-3">Trang Thêm Sản Phẩm</p>
         <div class="row mt-4" style="margin-left: 15px;">
             <div class="col-md-3">
                 <label for="maSanPham" class="form-label">Mã Sản Phẩm</label>

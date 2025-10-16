@@ -12,7 +12,7 @@ class HomeController extends Controller
     public function test_sp()
     {
         // Lấy 6 sản phẩm đầu tiên
-        $products = SanPham::take(12)->get();
+        $products = SanPham::take(10)->get();
 
         return view('home', ['products' => $products]);
     }
