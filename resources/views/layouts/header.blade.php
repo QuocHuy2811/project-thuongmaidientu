@@ -7,7 +7,7 @@
                             <li><a href="#"><i class="fa fa-user"></i> My Account</a></li>
                             <li><a href="#"><i class="fa fa-heart"></i> Wishlist</a></li>
                             <li><a href="/cart"><i class="fa fa-user"></i> My Cart</a></li>
-                            <li><a href=""><i class="fa fa-user"></i> Checkout</a></li>
+                            <li><a href="/checkout"><i class="fa fa-user"></i> Checkout</a></li>
                             @if(Session::has('user'))
                                 <!-- Đã đăng nhập: Ẩn login, thay bằng logout -->
                                 <li><a href="{{ route('logout') }}" onclick="return confirm('Bạn có chắc muốn đăng xuất?')">

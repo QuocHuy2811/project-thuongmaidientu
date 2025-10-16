@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {{-- Chèn phần header --}}
+    {{-- Chèn phần head --}}
     @include('layouts.head')
 </head>
   <body>
