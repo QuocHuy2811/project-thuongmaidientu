@@ -11,8 +11,9 @@ class HomeController extends Controller
 {
     public function test_sp()
     {
-        // Lấy 6 sản phẩm đầu tiên
-        $products = SanPham::take(10)->get();
+        // Lấy 10 sản phẩm đầu tiên
+        // $products = SanPham::take(10)->get();
+        $products = SanPham::all();
 
         return view('home', ['products' => $products]);
     }
