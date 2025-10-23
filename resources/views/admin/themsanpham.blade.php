@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="col-md-3">
                 <label for="maSanPham" class="form-label">Mã Sản Phẩm</label>
                 <input type="text" class="form-control @error('maSanPham') is-invalid @enderror" id="maSanPham" name="maSanPham" value="{{ old('maSanPham') }}" required>
-                {{-- Hiển thị lỗi nếu có --}}
+                {{-- Hiển thị lỗi --}}
                 @error('maSanPham')
                     <div class="invalid-feedback">{{ $message }}</div>  <!-- Sẽ show: "Mã sản phẩm đã tồn tại." -->
                 @enderror
@@ -118,26 +118,6 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
         <div class="row mt-4" style="margin-left: 15px;">
             <div class="col-md-3">
-                <label for="hinhAnh" class="form-label">Ảnh Sản Phẩm</label>
-                
-                <!-- Container chính cho tất cả ảnh -->
-                <div id="image-container">
-                    <!-- Input ảnh đầu tiên (mặc định) -->
-                    <div class="image-input-group mb-2">
-                        <input type="file" class="form-control" id="hinhAnh" name="hinhAnh[]" accept="image/*" required>
-                        <small class="text-muted d-block">Ảnh chính</small>
-                    </div>
-                    
-                    <!-- Container riêng cho các ảnh thêm (nhóm khác, dễ xử lý) -->
-                    <div id="additional-images" id="hinhAnh" class="additional-images"></div>
-                </div>
-                
-                <!-- Button + để thêm input mới -->
-                <button type="button" id="add-image-btn" class="btn btn-outline-primary btn-sm mt-2">
-                    <i class="fa fa-plus"></i> Thêm ảnh
-                </button>
-            </div>
-            <div class="col-md-3">
                 <label for="soLuongTon" class="form-label">Số Lượng Tồn Kho</label>
                 <input type="number" class="form-control" id="soLuongTon" name="soLuongTon" value="{{ old('soLuongTon') }}" min="0" required>
             </div>
@@ -153,6 +133,15 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="col-md-3">
                 <label for="mauSanPham" class="form-label">Màu Sản Phẩm</label>
                 <input type="text" class="form-control" id="mauSanPham" name="mauSanPham" value="{{ old('mauSanPham') }}">
+            </div>
+            <div class="col-md-3">
+                <label for="maDanhMuc" class="form-label">Danh Mục Sản Phẩm</label>
+                <select class="form-select" id="maDanhMuc" name="maDanhMuc" required>
+                    <option value="">Chọn danh mục</option>
+                    @foreach($danhMucs as $danhMuc)
+                        <option value="{{ $danhMuc->maDanhMuc }}" {{ old('maDanhMuc') == $danhMuc->maDanhMuc ? 'selected' : '' }}>{{ $danhMuc->tenDanhMuc }}</option>
+                    @endforeach
+                </select>
             </div>
         </div>
         <div class="row mt-4" style="margin-left: 15px;">
@@ -181,16 +170,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 <input type="text" class="form-control" id="hz" name="hz" value="{{ old('hz') }}">
             </div>
         </div>
-        {{-- Row mới cho DanhMuc --}}
         <div class="row mt-4" style="margin-left: 15px;">
             <div class="col-md-3">
-                <label for="maDanhMuc" class="form-label">Danh Mục Sản Phẩm</label>
-                <select class="form-select" id="maDanhMuc" name="maDanhMuc" required>
-                    <option value="">Chọn danh mục</option>
-                    @foreach($danhMucs as $danhMuc)
-                        <option value="{{ $danhMuc->maDanhMuc }}" {{ old('maDanhMuc') == $danhMuc->maDanhMuc ? 'selected' : '' }}>{{ $danhMuc->tenDanhMuc }}</option>
-                    @endforeach
-                </select>
+                <label for="hinhAnh" class="form-label">Ảnh Sản Phẩm</label>
+                <!-- Container chính cho tất cả ảnh -->
+                <div id="image-container">
+                    <!-- Input ảnh đầu tiên (mặc định) -->
+                    <div class="image-input-group mb-2">
+                        <input type="file" class="form-control" id="hinhAnh" name="hinhAnh[]" accept="image/*" required>
+                        <small class="text-muted d-block">Ảnh chính</small>
+                    </div>
+                    <!-- Container riêng cho các ảnh thêm (nhóm khác, dễ xử lý) -->
+                    <div id="additional-images" id="hinhAnh" class="additional-images"></div>
+                </div>
+                <!-- Button + để thêm input mới -->
+                <button type="button" id="add-image-btn" class="btn btn-outline-primary btn-sm mt-2">
+                    <i class="fa fa-plus"></i> Thêm ảnh
+                </button>
             </div>
             <div class="col-md-9"></div> {{-- Spacer để cân layout --}}
         </div>
