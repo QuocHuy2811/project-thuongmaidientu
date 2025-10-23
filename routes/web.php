@@ -3,10 +3,10 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LienHeController;
 use App\Http\Controllers\loginController;
-use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
-use Psy\TabCompletion\Matcher\FunctionsMatcher;
+// use Psy\TabCompletion\Matcher\FunctionsMatcher;
 
 Route::get('/contact', [LienHeController::class, 'index'])->name('contact');
 Route::post('/contact', [LienHeController::class, 'store']);
@@ -47,14 +47,15 @@ Route::group(['middleware' => ['web']], function () {
 Route::prefix('admin')->middleware(['admin.auth'])->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.home');
     Route::get('/them-san-pham',[AdminController::class,'themSanPham'])->name('admin.themsanpham');
+    Route::post('/them-san-pham',[AdminController::class,'storeSanPham'])->name('admin.store-san-pham');
     Route::get('/blankpage',[AdminController::class,'blankPage'])->name('admin.blankpageadmin');
 });
-Route::get('/test-db', function () {
-    try {
-        DB::connection()->getPdo();
-        return 'Kết nối database thành công!';
-    } catch (\Exception $e) {
-        return 'Lỗi kết nối: ' . $e->getMessage();
-    }
-});
+// Route::get('/test-db', function () {
+//     try {
+//         DB::connection()->getPdo();
+//         return 'Kết nối database thành công!';
+//     } catch (\Exception $e) {
+//         return 'Lỗi kết nối: ' . $e->getMessage();
+//     }
+// });
 //Route::get('/test_sp', [HomeController::class, 'test_sp']);
