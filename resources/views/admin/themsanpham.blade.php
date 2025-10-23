@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (addBtn && additionalContainer) {
         addBtn.addEventListener('click', function() {
-            if (imageCounter >= 4) { // Giới hạn max 5 ảnh thêm (tùy chỉnh)
+            if (imageCounter >= 4) { // Giới hạn max 4 ảnh thêm (tùy chỉnh)
                 alert('Tối đa 4 ảnh!');
                 return;
             }

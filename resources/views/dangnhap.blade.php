@@ -7,7 +7,7 @@
 @section('css')
 
 @section('js')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
         $('#login-form').on('submit', function(e) {
@@ -63,6 +63,107 @@
                 }
             });
         });
+    });
+    </script> -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        const loginForm = document.getElementById('login-form');
+        const errorMessageEl = document.getElementById('error-message');
+        const successMessageEl = document.getElementById('success-message');
+        const emailErrorEl = document.getElementById('email-error');
+        const passwordErrorEl = document.getElementById('password-error');
+
+        if (loginForm) {
+            loginForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Ngăn tải lại trang
+
+                // Xóa thông báo cũ
+                if (emailErrorEl) emailErrorEl.style.display = 'none';
+                if (passwordErrorEl) passwordErrorEl.style.display = 'none';
+                if (successMessageEl) {
+                    successMessageEl.style.display = 'none';
+                    successMessageEl.textContent = '';
+                }
+                if (errorMessageEl) {
+                    errorMessageEl.style.display = 'none';
+                    errorMessageEl.textContent = '';
+                }
+
+                // Tạo FormData từ form
+                const formData = new FormData(loginForm);
+
+                // Gửi yêu cầu Ajax với fetch
+                fetch(loginForm.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => { throw err; });
+                    }
+                    return response.json();
+                })
+                .then(response => {
+                    // Xóa thông báo lỗi trước khi hiển thị thông báo thành công
+                    if (emailErrorEl) emailErrorEl.style.display = 'none';
+                    if (errorMessageEl) {
+                        errorMessageEl.style.display = 'none';
+                        errorMessageEl.textContent = '';
+                    }
+                    if (passwordErrorEl) passwordErrorEl.style.display = 'none';
+
+                    if (response.success) {
+                        if (successMessageEl) {
+                            successMessageEl.textContent = 'Đăng nhập thành công! Đang chuyển hướng...';
+                            successMessageEl.style.display = 'block';
+                        }
+                        // Redirect dựa trên role
+                        const redirectUrl = response.role === 'admin' ? "{{ route('admin.home') }}" : "{{ route('home') }}";
+                        setTimeout(function() {
+                            window.location.href = redirectUrl; // Chuyển hướng sau 1 giây
+                        }, 1000);
+                    }
+                })
+                .catch(error => {
+                    // Xóa thông báo cũ
+                    if (emailErrorEl) emailErrorEl.style.display = 'none';
+                    if (errorMessageEl) {
+                        errorMessageEl.style.display = 'none';
+                        errorMessageEl.textContent = '';
+                    }
+                    if (passwordErrorEl) passwordErrorEl.style.display = 'none';
+
+                    // Kiểm tra lỗi xác thực
+                    if (error && error.errors) {
+                        const errors = error.errors;
+                        if (errors.exampleInputEmail1 && errors.exampleInputEmail1.length > 0) {
+                            if (emailErrorEl) {
+                                emailErrorEl.textContent = errors.exampleInputEmail1[0];
+                                emailErrorEl.style.display = 'block';
+                            }
+                        }
+                        if (errors.exampleInputPassword && errors.exampleInputPassword.length > 0) {
+                            if (passwordErrorEl) {
+                                passwordErrorEl.textContent = errors.exampleInputPassword[0];
+                                passwordErrorEl.style.display = 'block';
+                            }
+                        }
+                    } else if (error && error.message) {
+                        // Hiển thị lỗi đăng nhập sai
+                        if (errorMessageEl) {
+                            errorMessageEl.textContent = error.message;
+                            errorMessageEl.style.display = 'block';
+                        }
+                    } else {
+                        // Lỗi không xác định
+                        if (errorMessageEl) {
+                            errorMessageEl.textContent = 'Đã có lỗi xảy ra. Vui lòng thử lại.';
+                            errorMessageEl.style.display = 'block';
+                        }
+                    }
+                });
+            });
+        }
     });
     </script>
 @section('content')
